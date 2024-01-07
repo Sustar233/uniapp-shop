@@ -4,6 +4,7 @@ import CustomNavebar from './components/CustomNavba.vue'
 
 <template>
   <CustomNavebar />
+  <ShopSwiper />
   <view class="index">index</view>
 </template>
 
