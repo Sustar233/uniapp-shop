@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { BannerItem } from '@/types/home'
 import { getHomeBannerAPI } from '@/services/home'
-import CustomNavebar from './components/CustomNavba.vue'
 import { ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
+import CustomNavbar from './components/CustomNavbar.vue'
+import CatePanel from './components/CatePanel.vue'
 
 const bannerList = ref<BannerItem[]>([])
 const getHomeBannerData = async () => {
@@ -18,12 +19,16 @@ onLoad(() => {
 
 <template>
   <!-- 自定义导航栏 -->
-  <CustomNavebar />
+  <CustomNavbar />
   <!-- 自定义轮播图 -->
   <ShopSwiper :list="bannerList" />
+  <!-- 分类面板 -->
+  <CatePanel />
   <view class="index">index</view>
 </template>
 
 <style lang="scss">
-//
+page {
+  background-color: #f7f7f7;
+}
 </style>
