@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BannerItem } from '@/types/home'
+import type { BannerItem, CategoryItem } from '@/types/home'
 import { getHomeBannerAPI, getHomeCategoryAPI } from '@/services/home'
 import { ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
@@ -14,8 +14,10 @@ const getHomeBannerData = async () => {
 }
 
 // 获取前台分类数据
+const categoryList = ref<CategoryItem[]>([])
 const getHomeCategoryData = async () => {
   const res = await getHomeCategoryAPI()
+  categoryList.value = res.result
 }
 
 // 页面加载
@@ -31,7 +33,7 @@ onLoad(() => {
   <!-- 自定义轮播图 -->
   <ShopSwiper :list="bannerList" />
   <!-- 分类面板 -->
-  <CatePanel />
+  <CatePanel :list="categoryList" />
   <view class="index">index</view>
 </template>
 
