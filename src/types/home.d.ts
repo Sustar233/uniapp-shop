@@ -19,3 +19,16 @@ export type CategoryItem = {
   /** 分类名称 */
   name: string
 }
+
+//
+export type HotItem = {
+  /** 图标路径 */
+  title: string
+  /** id */
+  id: string
+  /** 分类名称 */
+  alt: string
+  pictures: string[]
+  target: string
+  type: string
+}
