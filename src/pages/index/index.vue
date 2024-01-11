@@ -7,6 +7,7 @@ import CustomNavbar from './components/CustomNavbar.vue'
 import type { ShopGuessInstance } from '@/components/components.d.ts'
 import CatePanel from './components/CatePanel.vue'
 import HotPanel from './components/HotPanel.vue'
+import PageSkeleton from './components/PageSkeleton.vue'
 
 // 获取轮播图数据
 const bannerList = ref<BannerItem[]>([])
@@ -29,11 +30,14 @@ const getHomeHotData = async () => {
   hotList.value = res.result
 }
 
+// 是否加载中
+const isLoading = ref(false)
+
 // 页面加载
-onLoad(() => {
-  getHomeBannerData()
-  getHomeCategoryData()
-  getHomeHotData()
+onLoad(async () => {
+  isLoading.value = true
+  await Promise.all([getHomeBannerData(), getHomeCategoryData(), getHomeHotData()])
+  isLoading.value = false
 })
 
 // 获取猜你喜欢组件实例
@@ -79,15 +83,17 @@ const onRefresherrefresh = async () => {
     class="scroll-view"
     scroll-y
   >
-    <!-- 自定义轮播图 -->
-    <ShopSwiper :list="bannerList" />
-    <!-- 分类面板 -->
-    <CatePanel :list="categoryList" />
-    <!-- 热门推荐 -->
-    <HotPanel :list="hotList" />
-    <!-- 猜你喜欢 -->
-    <ShopGuess ref="guessRef" />
-    <view class="index">index</view>
+    <PageSkeleton v-if="isLoading" />
+    <template v-else>
+      <!-- 自定义轮播图 -->
+      <ShopSwiper :list="bannerList" />
+      <!-- 分类面板 -->
+      <CatePanel :list="categoryList" />
+      <!-- 热门推荐 -->
+      <HotPanel :list="hotList" />
+      <!-- 猜你喜欢 -->
+      <ShopGuess ref="guessRef" />
+    </template>
   </scroll-view>
 </template>
 
