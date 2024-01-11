@@ -4,6 +4,7 @@ import { getHomeBannerAPI, getHomeCategoryAPI, getHomeHotAPI } from '@/services/
 import { ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import CustomNavbar from './components/CustomNavbar.vue'
+import type { ShopGuessInstance } from '@/components/components.d.ts'
 import CatePanel from './components/CatePanel.vue'
 import HotPanel from './components/HotPanel.vue'
 
@@ -35,22 +36,40 @@ onLoad(() => {
   getHomeHotData()
   console.log(hotList)
 })
+
+// 获取猜你喜欢组件实例
+const guessRef = ref<ShopGuessInstance>()
+// 滚动触底
+const onScrolltolower = () => {
+  guessRef.value?.getMore()
+}
 </script>
 
 <template>
   <!-- 自定义导航栏 -->
   <CustomNavbar />
-  <!-- 自定义轮播图 -->
-  <ShopSwiper :list="bannerList" />
-  <!-- 分类面板 -->
-  <CatePanel :list="categoryList" />
-  <!-- 热门推荐 -->
-  <HotPanel :list="hotList" />
-  <view class="index">index</view>
+  <scroll-view @scrolltolower="onScrolltolower" class="scroll-view" scroll-y>
+    <!-- 自定义轮播图 -->
+    <ShopSwiper :list="bannerList" />
+    <!-- 分类面板 -->
+    <CatePanel :list="categoryList" />
+    <!-- 热门推荐 -->
+    <HotPanel :list="hotList" />
+    <!-- 猜你喜欢 -->
+    <ShopGuess ref="guessRef" />
+    <view class="index">index</view>
+  </scroll-view>
 </template>
 
 <style lang="scss">
 page {
   background-color: #f7f7f7;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.scroll-view {
+  flex: 1;
 }
 </style>
