@@ -11,8 +11,6 @@ const getData = async () => {
     url: '/home/banner',
     header: {},
   })
-  console.log('!!!')
-  console.log(res)
 }
 </script>
 
