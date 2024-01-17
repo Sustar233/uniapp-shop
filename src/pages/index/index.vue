@@ -4,10 +4,10 @@ import { getHomeBannerAPI, getHomeCategoryAPI, getHomeHotAPI } from '@/services/
 import { ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import CustomNavbar from './components/CustomNavbar.vue'
-import type { ShopGuessInstance } from '@/components/components.d.ts'
 import CatePanel from './components/CatePanel.vue'
 import HotPanel from './components/HotPanel.vue'
 import PageSkeleton from './components/PageSkeleton.vue'
+import { useGuessList } from '@/composables'
 
 // 获取轮播图数据
 const bannerList = ref<BannerItem[]>([])
@@ -32,20 +32,20 @@ const getHomeHotData = async () => {
 
 // 是否加载中
 const isLoading = ref(false)
-
-// 页面加载
 onLoad(async () => {
   isLoading.value = true
   await Promise.all([getHomeBannerData(), getHomeCategoryData(), getHomeHotData()])
   isLoading.value = false
 })
 
-// 获取猜你喜欢组件实例
-const guessRef = ref<ShopGuessInstance>()
-// 滚动触底
-const onScrolltolower = () => {
-  guessRef.value?.getMore()
-}
+// 猜你喜欢组合式函数调用
+const { guessRef, onScrolltolower } = useGuessList()
+// // 获取猜你喜欢组件实例
+// const guessRef = ref<ShopGuessInstance>()
+// // 滚动触底
+// const onScrolltolower = () => {
+//   guessRef.value?.getMore()
+// }
 
 const isTriggered = ref(false)
 // 自定义下拉刷新被触发
