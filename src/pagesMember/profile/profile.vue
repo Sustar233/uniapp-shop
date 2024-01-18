@@ -4,6 +4,7 @@ import { putMemberProfileAPI, getMemberProfileAPI } from '@/services/profile'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 import { useMemberStore } from '@/stores'
+import type { Gender } from '@/types/member'
 
 // 获取屏幕边界到安全区域距离
 const { safeAreaInsets } = uni.getSystemInfoSync()
@@ -53,10 +54,37 @@ const onAvatarChange = () => {
   })
 }
 
+// 修改性别
+const onGenderChange: UniHelper.RadioGroupOnChange = (ev) => {
+  console.log(ev.detail.value)
+  profile.value.gender = ev.detail.value as Gender
+}
+
+// 修改生日
+const onBirthdayChange: UniHelper.DatePickerOnChange = (ev) => {
+  profile.value.birthday = ev.detail.value
+}
+
+// 修改城市
+let fullLocationCode: [string, string, string] = ['', '', '']
+const onFullLocationChange: UniHelper.RegionPickerOnChange = (ev) => {
+  // 修改前端界面
+  profile.value.fullLocation = ev.detail.value.join(' ')
+  // 提交后端更新
+  fullLocationCode = ev.detail.code!
+}
+
 // 点击保存提交表单
 const onSubmit = async () => {
+  const { nickname, gender, birthday, profession } = profile.value
   const res = await putMemberProfileAPI({
-    nickname: profile.value?.nickname,
+    nickname: nickname,
+    gender: gender,
+    birthday: birthday,
+    provinceCode: fullLocationCode[0],
+    cityCode: fullLocationCode[1],
+    countyCode: fullLocationCode[2],
+    profession: profession,
   })
   // 更新Store昵称
   memberStore.profile!.nickname = res.result.nickname
@@ -95,7 +123,7 @@ const onSubmit = async () => {
         </view>
         <view class="form-item">
           <text class="label">性别</text>
-          <radio-group>
+          <radio-group @change="onGenderChange">
             <label class="radio">
               <radio value="男" color="#27ba9b" :checked="profile?.gender === '男'" />
               男
@@ -109,6 +137,7 @@ const onSubmit = async () => {
         <view class="form-item">
           <text class="label">生日</text>
           <picker
+            @change="onBirthdayChange"
             class="picker"
             mode="date"
             start="1900-01-01"
@@ -121,7 +150,12 @@ const onSubmit = async () => {
         </view>
         <view class="form-item">
           <text class="label">城市</text>
-          <picker class="picker" mode="region" :value="profile?.fullLocation?.split(' ')">
+          <picker
+            @change="onFullLocationChange"
+            class="picker"
+            mode="region"
+            :value="profile?.fullLocation?.split(' ')"
+          >
             <view v-if="profile?.fullLocation">{{ profile?.fullLocation }}</view>
             <view class="placeholder" v-else>请选择城市</view>
           </picker>
