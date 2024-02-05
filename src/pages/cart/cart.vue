@@ -68,11 +68,8 @@ const onChangeCount = (ev: InputNumberBoxEvent) => {
             <!-- 商品信息 -->
             <view class="goods">
               <!-- 选中状态 -->
-              <text
-                @tap="($event) => onChangeSelected(item)"
-                class="checkbox"
-                :class="{ checked: item.selected }"
-              ></text>
+              <!-- @tap="($event) => onChangeSelected(item)" -->
+              <text class="checkbox" :class="{ checked: item.selected }"></text>
               <navigator
                 :url="`/pages/goods/goods?id=${item.id}`"
                 hover-class="none"
