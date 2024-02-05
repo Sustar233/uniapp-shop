@@ -5,7 +5,7 @@
 
 ### 技术栈
 
-- 前端框架：[uni-app](https://uniapp.dcloud.net.cn/)(Vue3 + TS + Setup)
+- 前端框架：[uni-app](Vue3 + TS + Setup)
 - 状态管理：[pinia](https://pinia.vuejs.org/zh/)
 - 组件库：[uni-ui](https://uniapp.dcloud.net.cn/component/uniui/uni-ui.html)
 
